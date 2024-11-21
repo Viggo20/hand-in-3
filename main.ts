@@ -1,9 +1,27 @@
 namespace SpriteKind {
     export const passive = SpriteKind.create()
 }
+function changeText () {
+    if (counter == 0) {
+        text = "Der bliver smidt 10 ton plastik ud i havet om året!"
+    } else if (counter == 1) {
+        text = "Det ødelægger ikke bare havet, men dræber også fisk!"
+    } else if (counter == 2) {
+        text = "Find endnu en fact"
+    } else {
+        text = "Find endnu en fact"
+    }
+}
 function tileMap () {
     tiles.setCurrentTilemap(tilemap`level1`)
 }
+scene.onOverlapTile(SpriteKind.Player, assets.tile`plastic`, function (sprite, location) {
+    changeText()
+    tiles.setTileAt(location, assets.tile`myTile10`)
+    counter += 1
+    game.showLongText(text, DialogLayout.Bottom)
+    info.changeScoreBy(100)
+})
 function player2 () {
     mySprite = sprites.create(img`
         . . . . . . . . . . . . . . . . 
@@ -85,6 +103,13 @@ function spawnFish () {
     tiles.placeOnTile(fish1, tiles.getTileLocation(randint(0, 75), randint(0, 75)))
     tiles.placeOnTile(fish2, tiles.getTileLocation(randint(0, 75), randint(0, 75)))
     tiles.placeOnTile(fish3, tiles.getTileLocation(randint(0, 75), randint(0, 75)))
+    fish1.setVelocity(randint(-100, 100), randint(-100, 100))
+    fish2.setVelocity(randint(-100, 100), randint(-100, 100))
+    fish3.setVelocity(randint(-100, 100), randint(-100, 100))
+    fish1.setBounceOnWall(true)
+    fish1.setBounceOnWall(true)
+    fish2.setBounceOnWall(true)
+    fish3.setBounceOnWall(true)
     animation.runImageAnimation(
     fish1,
     [img`
@@ -309,16 +334,15 @@ function spawnFish () {
     )
     fishCounter += 1
 }
-let mySprite: Sprite = null
 let fish3: Sprite = null
 let fish2: Sprite = null
 let fish1: Sprite = null
+let mySprite: Sprite = null
+let text = ""
+let counter = 0
 let fishCounter = 0
 tileMap()
 player2()
 while (fishCounter <= 5) {
     spawnFish()
 }
-fish1.setVelocity(randint(-100, 100), randint(-100, 100))
-fish2.setVelocity(randint(-100, 100), randint(-100, 100))
-fish3.setVelocity(randint(-100, 100), randint(-100, 100))
